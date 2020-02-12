@@ -2,12 +2,12 @@
 version: '3.3'
 
 services:
-  interlok: 
+  interlok:
     image: adaptrislabs/interlok-docker-profiler
     container_name: interlok-docker-profiler
     hostname: interlok
     environment:
-      JVM_ARGS: -cp /opt/interlok/config/ -javaagent:lib/aspectjweaver.jar -Dorg.aspectj.weaver.loadtime.configuration=META-INF/profiler-aop.xml
+      JVM_ARGS: -javaagent:lib/aspectjweaver.jar -Dorg.aspectj.weaver.loadtime.configuration=META-INF/profiler-aop.xml
     ports:
       - 8080:8080
       - 5555:5555

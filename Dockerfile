@@ -1,4 +1,4 @@
-FROM adaptris/interlok:snapshot-corretto
+FROM adaptris/interlok-base:snapshot-corretto
 
 EXPOSE 8080
 EXPOSE 5555
