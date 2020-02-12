@@ -102,7 +102,7 @@ dependencies {
   war ("com.adaptris.ui:interlok:$interlokCoreVersion@war") {changing=true}
   verify files("$buildDir/install/${project.name}/config"){
     builtBy 'installDist'
-  }  
+  }
 }
 
 distZip {
@@ -124,6 +124,11 @@ distributions {
       // ovewrite the config files with custom ones.
       into('config') {
         from(localizeConfig)
+      }
+      into('docker') {
+        from {
+          "src/main/docker"
+        }
       }
       // Exclude the localized property files
       exclude "**/*.properties.*"
