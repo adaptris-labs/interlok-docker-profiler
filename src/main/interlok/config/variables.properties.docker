@@ -1,0 +1,3 @@
+adapter.unique.id=interlok-docker-profiler
+adapter.fs.base.url=${adapter.base.url}/fs/${adapter.unique.id}
+adapter.base.url=file\://localhost/${user.dir}
