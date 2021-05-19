@@ -1,13 +1,27 @@
-# docker-compose up //
-version: '3.3'
-
+version: '3.7'
 services:
   interlok:
-    image: adaptrislabs/interlok-docker-profiler
-    container_name: interlok-docker-profiler
-    hostname: interlok
-    environment:
-      JVM_ARGS: -javaagent:lib/aspectjweaver.jar -Dorg.aspectj.weaver.loadtime.configuration=META-INF/profiler-aop.xml
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - 8080:8080
-      - 5555:5555
+      - '8081:8080'
+    environment:
+      JAVA_OPTS: -javaagent:lib/aspectjweaver.jar -Dorg.aspectj.weaver.loadtime.configuration=META-INF/profiler-interlok-all.xml
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./src/main/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yaml
+  grafana:
+    image: grafana/grafana
+    environment:
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src/main/grafana/provisioning:/etc/grafana/provisioning/

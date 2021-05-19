@@ -1,34 +1,32 @@
-# interlok-docker-profiler
+# Interlok, Prometheus and Grafana
 
 ## What is this
 
-This image runs an instance of Interlok with the profiling monitor enabled using AspectJ.
+This image runs an instance of Interlok with profiling enabled along with Prometheus & Grafana to showcase how to get various metrics from Interlok.
 
 ## Quickstart
 
-* You'll need java of course because gradle is the build system.
-* Docker of course
+```shell
+./gradlew clean check assemble
+docker-compouse up -d
+```
 
-* `./gradlew docker`
-    * Since you haven't specified a image name, it will be _adaptrislabs/interlok-docker-profiler_
-    * The version is _latest_;
-* Either run `docker-compose up` or `./gradlew dockerComposeUp`
-    * Wait for the adapter to fully start (you'll see something in the console output to that effect).
+## Dashboards
 
-Now you'll see lots of logging which is the profiler searching for events.  Simply do a HTTP POST to http://localhost:8080/endpoint1.
+### Grafana
 
-After a short time you'll see profiling statistics showing up in the logs.
+- [JVM](http://localhost:3000/d/K9kmttsGk/jvm)
+- [Interlok](http://localhost:3000/d/XyHj4tsMk/interlok)
 
-## Resources
+### Prometheus
 
-* https://interlok.adaptris.net/interlok-docs
+- [workflow_avgnanos](http://localhost:9090/graph?g0.expr=workflow_avgnanos&g0.tab=1&g0.stacked=0&g0.range_input=1h)
 
-## Gradle flags
 
-You can control some behaviour by passing in project properties in the form *-PpropertyKey=value*
+## Logging
 
-Property Key | Default Value | Description | Notes
------------- | ------------- | ----------- | -----
-releaseVersion|latest|The docker tag version ||
-dockerImageName|adaptrislabs/interlok-docker-profiler| The docker image name||
-buildEnv|docker|Change it to anything else to drive local properties from your hostname| This directly affects the way property files are sourced, by default it will be `variables.propertes.{buildEnv}`|
+Since the various management components re-use interlok components to provide statistics we are in a situation where we want to filter out logging which _isn't all that interesting_ out of the console logging.
+
+- We use javascript to filter out the log events where the context map contains "ManagementComponent". This uses the built in `nashorn` engine in Java11 which is deprecated.
+- We filter out logging from `com.adaptris.profiler` to avoid logging from the aspect activity.
+- Since we are using the logging aspect as well we can use `%notEmpty{[%X{messageId}]}` to display the messageID that is being acted upon in the logfile.
