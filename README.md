@@ -8,7 +8,7 @@ This image runs an instance of Interlok with profiling enabled along with Promet
 
 ```shell
 ./gradlew clean check assemble
-docker-compouse up -d
+docker-compose up -d
 ```
 
 ## Dashboards
