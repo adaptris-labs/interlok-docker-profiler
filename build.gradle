@@ -1,6 +1,6 @@
 ext {
   interlokParentGradle = 'https://raw.githubusercontent.com/adaptris/interlok-build-parent/main/v4/build.gradle'
-  interlokVersion = '4.2-SNAPSHOT'
+  interlokVersion = '4.3-SNAPSHOT'
 }
 
 allprojects {
